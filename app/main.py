@@ -111,7 +111,7 @@ class Dictionary:
             current_node = head_node
             while current_node is not None:
                 yield (current_node.key, current_node.value)
-                current_node = current_node.next
+                current_node = current_node.next_node
 
     def clear(self) -> None:
         self._buckets = [None] * self._capacity
