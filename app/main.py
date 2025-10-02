@@ -93,7 +93,7 @@ class Dictionary:
         bucket_index = self._bucket_index_for_hash(key_hash)
         _, found_node = self._find_in_bucket(key, key_hash, bucket_index)
         if found_node is None:
-            raise KeyError(key)
+            raise KeyError(f"Key {key!r} not found")
         return found_node.value
 
     def __len__(self) -> int:
@@ -106,6 +106,13 @@ class Dictionary:
                 yield current_node.key
                 current_node = current_node.next_node
 
+    def items(self) -> Iterator[Tuple[Any, Any]]:
+        for head_node in self._buckets:
+            current_node = head_node
+            while current_node is not None:
+                yield (current_node.key, current_node.value)
+                current_node = current_node.next
+
     def clear(self) -> None:
         self._buckets = [None] * self._capacity
         self._size = 0
@@ -115,7 +122,7 @@ class Dictionary:
         bucket_index = self._bucket_index_for_hash(key_hash)
         previous_node, node = self._find_in_bucket(key, key_hash, bucket_index)
         if node is None:
-            raise KeyError(key)
+            raise KeyError(f"Key {key!r} not found")
 
         # remove node from linked list
         if previous_node is None:
